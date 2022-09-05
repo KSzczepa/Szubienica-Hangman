@@ -52,3 +52,15 @@ body
     float: left;
     cursor: pointer;
 }
+
+.reset
+{
+    color: green;
+    cursor: pointer;
+    font-size: 48px;
+}
+
+.reset:hover
+{
+    color: white;
+}

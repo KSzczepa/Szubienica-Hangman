@@ -2,6 +2,11 @@ var haslo = "Bez pracy nie ma kolaczy";
 haslo = haslo.toUpperCase();
 haslo = haslo.split("");
 var haslo_c = haslo;
+var skucha = 0;
+
+var yes = new Audio("audio/yes.wav");
+var no = new Audio("audio/no.wav");
+
 
 var ukryte_haslo = "";
 var dlugosc = haslo.length;
@@ -44,22 +49,38 @@ function sprawdz(nr)
     {
         if (haslo[i] == String.fromCharCode(65+nr))
         {
-            //String.replaceChar(i, haslo[i]);
-            
+            //String.replaceChar(i, haslo[i]);            
             replaceChar(i, haslo[i]);
             trafiona = true;
-        }
-        
+        }        
     }
+
     pokoloruj(nr, trafiona);
-        trafiona = false;
+
     
+    if (!trafiona)
+    {
+        if (skucha<9)
+        {
+            skucha ++;
+            changeImg(skucha);
+        }
+        else
+            looser();
+    }
+
+    trafiona = false;  
+    
+    //wygrana
+    if (haslo.join("") == ukryte_haslo)
+        winner();
 }
 
 function pokoloruj(nr, trafiona)
 {
-    if (trafiona == true)
+    if (trafiona)
     {
+        yes.play();
         var element = "lit" + nr;
         document.getElementById(element).style.background = "#003300";
         document.getElementById(element).style.color = "#00C000";
@@ -70,12 +91,15 @@ function pokoloruj(nr, trafiona)
     }
     else
     {
+        no.play();
         var element = "lit" + nr;
         document.getElementById(element).style.background = "#330000";
         document.getElementById(element).style.color = "#C00000";
         document.getElementById(element).style.border = "3px solid #C00000";
         document.getElementById(element).style.cursor = "default";
+        document.getElementById(element).setAttribute("onclick",";");
     }
+    
 }
 
 function replaceChar(place, sign)
@@ -89,4 +113,22 @@ function replaceChar(place, sign)
     ukryte_haslo = ukryte_haslo.split("");
     ukryte_haslo[place] = sign;
     ukryte_haslo = ukryte_haslo.join("");
+}
+
+function changeImg(img_nr)
+{
+    var file = "<img src=\"img/s" + img_nr + ".jpg\" />";
+    document.getElementById("szubienica").innerHTML = file;
+}
+
+
+
+function winner()
+{
+    document.getElementById("alfabet").innerHTML = "Correct. You are the winner!<br />" +haslo.join("")+'<br /><br /><span class="reset" onclick="location.reload()">ONCE AGAIN?</span>'
+}
+
+function looser()
+{
+    document.getElementById("alfabet").innerHTML = "You are the looser!" + '<br /><br /><span class="reset" onclick="location.reload()">ONCE AGAIN?</span>'
 }
